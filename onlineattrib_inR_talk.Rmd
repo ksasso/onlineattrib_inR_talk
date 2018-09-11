@@ -1,0 +1,54 @@
+---
+title: "Experimental Methods + Statistics in Online Attribution with R"
+author: "Katie Sasso"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+  ioslides_presentation:
+    widescreen: true
+    smaller: true
+    incremental: true
+---
+<style>
+.column-left{
+  float: left;
+  width: 46%;
+  text-align: left;
+}
+</style>
+
+<style>
+.column-left3{
+  float: left;
+  width: 32%;
+  text-align: left;
+}
+.column-center3{
+  display: inline-block;
+  width: 32%;
+  text-align: center;
+}
+.column-right3{
+  float: right;
+  width: 32%;
+  text-align: right;
+}
+</style>
+
+<style>
+pre {
+  white-space: pre !important;
+  overflow-y: scroll !important;
+  height: 50vh !important;
+}
+</style>
+
+## Materials
+
+https://github.com/ksasso/MLmodels_inR_GDG2017
+
+
+
+
+
+
+
