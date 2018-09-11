@@ -6,7 +6,7 @@ output:
   ioslides_presentation:
     widescreen: true
     smaller: true
-    incremental: true
+    
 ---
 <style>
 .column-left{
@@ -42,11 +42,152 @@ pre {
 }
 </style>
 
-## Materials
 
-https://github.com/ksasso/MLmodels_inR_GDG2017
+## Experimental Methods + Statistics in Online Attribution with R
+
+<div class="column-left">
+
+###### Agenda
+
+- Who am I?
+- Different Approaches to Attribution 
+    + Rule-Based: Canned Approaches
+    + Ad-hoc Pre-Post Testing 
+    + A/B Testing & Experimental Methods
+    + Markov Chain Models in R 
+
+</div>
+
+###### Materials
+
+<div class="column-left">
+
+- https://github.com/ksasso/onlineattrib_inR_talk
+
+</div>
+
+## Who am I ? 
+
+```{r, echo = FALSE, message=FALSE, warning= FALSE, error=FALSE,out.width = "700px"}
+knitr::include_graphics("/Users/ksasso/Dropbox/R/web_analytics_wednesday/bio_pic.png")
+```
+
+## Different Approaches to Attribution
+
+LEFT OFF INSERT GRAPHICS HERE
 
 
+## Rule-Based: Canned Approaches
+
+<div class="column-left">
+
+Some Examples: 
+
+  - Last Interaction
+  - First Interaction
+  - Last Non-Direct Click
+  - Linear Attribution
+  - Time Decay
+  - Position Based
+
+</div>
+
+<div class="column-left">
+
+[Google Analytics](https://support.google.com/analytics/answer/1662518?hl=en) 
+
+```{r, echo = FALSE, message=FALSE, warning= FALSE, error=FALSE,out.width = "450px"}
+knitr::include_graphics("/Users/ksasso/Dropbox/R/web_analytics_wednesday/google_analytics.png")
+```
+
+</div>
+
+## Ad-hoc Pre-Post Testing
+
+<div class="column-left">
+
+An example:
+
+  - We track for the same customers sales over a two 2-week periods in which our Facebook ad was and was not live
+    + We then compare sales or conversion between these two time periods
+  - We can also treat ad_exposure as a predictor along with some other likely important factors (i.e., purchase hx, buying segment, days of week)
+    + Use more advanced modeling techniques to predict conversion or revenue
+  
+</div>
+
+<div class="column-left">
+
+Statistical Approaches: 
+
+   - Similar to what we will see for A/B test in basic form, but more limited inferences (not causal)
+   - Utilize more complicated machine learning models (i.e., glm, random forest, or xgBoost model) more on this soon !
+  
+[Some Modeling Options](https://en.wikipedia.org/wiki/A/B_testing#Common_test_statistics)
+```{r, echo = FALSE, message=FALSE, warning= FALSE, error=FALSE,out.width = "450px"}
+knitr::include_graphics("/Users/ksasso/Dropbox/R/web_analytics_wednesday/wiki_simpleABmodels.png")
+```
+
+</div>
+
+## A/B Testing & Experimental Methods
+
+<div class="column-left">
+
+The 3rd Variable Problem:
+
+  - Cities with more churches have higher crime rates. But what about population?
+
+```{r, echo = FALSE, message=FALSE, warning= FALSE, error=FALSE,out.width = "450px"}
+knitr::include_graphics("/Users/ksasso/Dropbox/R/web_analytics_wednesday/confounds.png")
+```
+
+</div>
+
+
+<div class="column-left">
+
+[Central Limit Theorem](https://en.wikipedia.org/wiki/Central_limit_theorem) & [Random Assignment](https://en.wikipedia.org/wiki/Random_assignment)
+
+  - Randomly assign customers to groups based on chance procedure
+  - Minimizes differences between groups such that differences can be attributed to experiment
+  - Central Limit Theorem: When random variables (independent) are added to a set their distribution tends toward a normal distribution (informally a “bell curve”) even if the original variables themselves are not normally distributed
+    + Helps justify the approximation of large-sample statistics to the normal distirubtion in controlled experiments 
+
+```{r, echo = FALSE, message=FALSE, warning= FALSE, error=FALSE,out.width = "300px"}
+knitr::include_graphics("/Users/ksasso/Dropbox/R/web_analytics_wednesday/bellcurve.png")
+```
+
+</div>
+
+## A/B Testing & Experimental Methods
+
+<div class="column-left">
+
+[Example A/B test diagram](https://conversionxl.com/blog/ab-testing-guide/)
+```{r, echo = FALSE, message=FALSE, warning= FALSE, error=FALSE,out.width = "300px"}
+knitr::include_graphics("/Users/ksasso/Dropbox/R/web_analytics_wednesday/AB_TEST.png")
+```
+
+</div>
+
+<div class="column-left">
+
+Statistical Approaches:
+
+  - Statistical methods same as ad-hoc pre-post, but now campaign exposure is randomly assigned!
+  - Randomization in R
+  
+```{r message=FALSE, warning= FALSE, eval = TRUE, echo=TRUE, results=FALSE, out.width = "500px", out.height='500px'}
+library(dplyr)
+head(mtcars)
+mtcars <- mtcars %>% 
+  mutate(row_id  = row_number())
+test <- mtcars %>% 
+  sample_frac(.5)
+control <- mtcars %>% 
+  filter(!row_id %in% test$row_id)
+```
+</div>
 
 
 
