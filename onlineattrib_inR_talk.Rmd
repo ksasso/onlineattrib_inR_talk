@@ -74,8 +74,10 @@ knitr::include_graphics("/Users/ksasso/Dropbox/R/web_analytics_wednesday/bio_pic
 
 ## Different Approaches to Attribution
 
-LEFT OFF INSERT GRAPHICS HERE
 
+```{r, echo = FALSE, message=FALSE, warning= FALSE, error=FALSE,out.width = "700px", out.height='450px'}
+knitr::include_graphics("/Users/ksasso/Dropbox/R/web_analytics_wednesday/methods_table.png")
+```
 
 ## Rule-Based: Canned Approaches
 
@@ -189,7 +191,118 @@ control <- mtcars %>%
 ```
 </div>
 
+```{r, echo = FALSE, message=FALSE, warning= FALSE, error=FALSE}
 
 
+```
 
+
+## A/B Testing & Experimental Methods
+
+<div class="column-left">
+
+Incorporating additional Predictors: Linear Method
+
+```{r, echo = FALSE, message=FALSE, warning= FALSE, error=FALSE,out.width = "300px"}
+knitr::include_graphics("/Users/ksasso/Dropbox/R/web_analytics_wednesday/glm.png")
+```
+
+```{r message=FALSE, warning= FALSE, eval = TRUE, echo=TRUE, results=FALSE, out.width = "500px", out.height='500px'}
+counts <- c(18,17,15,20,10,20,25,13,12)
+outcome <- gl(3,1,9)
+treatment <- gl(3,3)
+print(d.AD <- data.frame(treatment, outcome, counts))
+glm.D93 <- glm(counts ~ outcome + treatment, family = poisson())
+summary(glm.D93)
+```
+
+</div>
+
+<div class="column-left">
+
+Incorporating additional Predictors: xgBoost
+
+```{r, echo = FALSE, message=FALSE, warning= FALSE, error=FALSE,out.width = "400px", out.height='200px'}
+knitr::include_graphics("baseball_tree_ongraph.png")
+```
+
+```{r, echo = FALSE, message=FALSE, warning= FALSE, error=FALSE,out.width = "400px", out.height='300px'}
+knitr::include_graphics("gradientboosting.jpg")
+```
+
+</div>
+
+## Markov Chain Models in R 
+
+[ChannelAttribution Package in R](https://www.r-bloggers.com/attribution-model-with-r-part-1-markov-chains-concept/)
+
+Allows us to:
+
+  - Account for paths that don't result in conversion
+  - Switch from rule-based to probabilistic models
+  - Represent every customer journey as a chain in a directed Markov graph where each vertex is a possible state (channel/touchpoint) and the edges represent the probability of transition between the states (including conversion.)
+    + "Memory free" probability of reaching one state depends only on the previous state visited
+  - Take advantage of Removal effect
+    + Remove each channel from the path graph consecutively and measure how many conversions (or how much value) could be made (earned) without the one. 
+    + Allows you to say "If we had removed channel 1, what would the probability of conversion be?"
+  
+
+## Markov Chain Models in R: Implementation 
+
+```{r message=FALSE, warning= FALSE, eval = TRUE, echo=FALSE, results = TRUE, out.width = "700px", out.height='450px'}
+library(dplyr)
+library(reshape2)
+library(ggplot2)
+library(ChannelAttribution)
+library(markovchain)
+ 
+##### simple example #####
+# creating a data sample
+df1 <- data.frame(path = c('c1 > c2 > c3', 'c1', 'c2 > c3'), conv = c(1, 0, 0), conv_null = c(0, 1, 1))
+
+# calculating the models
+mod1 <- markov_model(df1,
+var_path = 'path',
+var_conv = 'conv',
+var_null = 'conv_null',
+out_more = TRUE)
+ 
+# extracting the results of attribution
+df_res1 <- mod1$result
+ 
+# extracting a transition matrix
+df_trans1 <- mod1$transition_matrix
+df_trans1 <- dcast(df_trans1, channel_from ~ channel_to, value.var = 'transition_probability')
+ 
+### plotting the Markov graph ###
+df_trans <- mod1$transition_matrix
+ 
+# adding dummies in order to plot the graph
+df_dummy <- data.frame(channel_from = c('(start)', '(conversion)', '(null)'),
+channel_to = c('(start)', '(conversion)', '(null)'),
+transition_probability = c(0, 1, 1))
+df_trans <- rbind(df_trans, df_dummy)
+ 
+# ordering channels
+df_trans$channel_from <- factor(df_trans$channel_from,
+levels = c('(start)', '(conversion)', '(null)', 'c1', 'c2', 'c3'))
+df_trans$channel_to <- factor(df_trans$channel_to,
+levels = c('(start)', '(conversion)', '(null)', 'c1', 'c2', 'c3'))
+df_trans <- dcast(df_trans, channel_from ~ channel_to, value.var = 'transition_probability')
+ 
+# creating the markovchain object
+trans_matrix <- matrix(data = as.matrix(df_trans[, -1]),
+nrow = nrow(df_trans[, -1]), ncol = ncol(df_trans[, -1]),
+dimnames = list(c(as.character(df_trans[, 1])), c(colnames(df_trans[, -1]))))
+trans_matrix[is.na(trans_matrix)] <- 0
+trans_matrix1 <- new("markovchain", transitionMatrix = trans_matrix)
+ 
+# plotting the graph
+plot(trans_matrix1, edge.arrow.size = 0.37)
+
+```
+
+## Thanks!
+
+Don't forget about the Data Cleaning! Yikes
 
