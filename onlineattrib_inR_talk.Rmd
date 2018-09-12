@@ -98,7 +98,7 @@ Some Examples:
 
 [Google Analytics](https://support.google.com/analytics/answer/1662518?hl=en) 
 
-```{r, echo = FALSE, message=FALSE, warning= FALSE, error=FALSE,out.width = "450px"}
+```{r, echo = FALSE, message=FALSE, warning= FALSE, error=FALSE,out.width = "500px"}
 knitr::include_graphics("/Users/ksasso/Dropbox/R/web_analytics_wednesday/google_analytics.png")
 ```
 
@@ -110,8 +110,8 @@ knitr::include_graphics("/Users/ksasso/Dropbox/R/web_analytics_wednesday/google_
 
 An example:
 
-  - We track for the same customers sales over a two 2-week periods in which our Facebook ad was and was not live
-    + We then compare sales or conversion between these two time periods
+  - We track the same customers' sales over a two 2-week period in which our Facebook ad was and was not live
+    + We then compare sales or conversion between these two time periods for the same customer (i.e., repeated measures)
   - We can also treat ad_exposure as a predictor along with some other likely important factors (i.e., purchase hx, buying segment, days of week)
     + Use more advanced modeling techniques to predict conversion or revenue
   
@@ -153,7 +153,7 @@ knitr::include_graphics("/Users/ksasso/Dropbox/R/web_analytics_wednesday/confoun
   - Randomly assign customers to groups based on chance procedure
   - Minimizes differences between groups such that differences can be attributed to experiment
   - Central Limit Theorem: When random variables (independent) are added to a set their distribution tends toward a normal distribution (informally a “bell curve”) even if the original variables themselves are not normally distributed
-    + Helps justify the approximation of large-sample statistics to the normal distirubtion in controlled experiments 
+    + Helps justify the approximation of large-sample statistics to the normal distribution in controlled experiments 
 
 ```{r, echo = FALSE, message=FALSE, warning= FALSE, error=FALSE,out.width = "300px"}
 knitr::include_graphics("/Users/ksasso/Dropbox/R/web_analytics_wednesday/bellcurve.png")
@@ -242,7 +242,7 @@ Allows us to:
   - Switch from rule-based to probabilistic models
   - Represent every customer journey as a chain in a directed Markov graph where each vertex is a possible state (channel/touchpoint) and the edges represent the probability of transition between the states (including conversion.)
     + "Memory free" probability of reaching one state depends only on the previous state visited
-  - Take advantage of Removal effect
+  - Take advantage of removal effect
     + Remove each channel from the path graph consecutively and measure how many conversions (or how much value) could be made (earned) without the one. 
     + Allows you to say "If we had removed channel 1, what would the probability of conversion be?"
   
